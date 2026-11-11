@@ -1,122 +1,161 @@
-# 🎓 Student Performance Prediction using Machine Learning
+# 🎓 Student Performance Prediction | Machine Learning & Streamlit
 
-## 📌 Project Overview
+A machine learning project that classifies student academic performance as **High Performance** or **Low Performance** using demographic, educational, and reading/writing score information. The project includes an exploratory Jupyter Notebook, model comparison, a trained Random Forest model artifact, and an interactive Streamlit application.
 
-This project predicts whether a student is likely to achieve **High Performance** or **Low Performance** based on demographic and academic features. The complete machine learning workflow includes data preprocessing, exploratory data analysis (EDA), feature engineering, model training, evaluation, and deployment using Streamlit.
+## Project Overview
 
----
+Educational institutions can use early indicators to identify students who may benefit from additional academic support. This project explores a binary classification approach using the Students Performance dataset.
 
-## 🎯 Problem Statement
+The target is created from the mathematics score:
+- **High Performance (1):** Mathematics score is 60 or above.
+- **Low Performance (0):** Mathematics score is below 60.
 
-Educational institutions often need to identify students who may require additional academic support. This project uses machine learning to predict student performance based on available student information.
+The mathematics score is removed from the input features after creating the target. The model predicts the target category using the remaining available features.
 
----
+> **Important:** This is an academic demonstration, not a validated tool for making high-impact decisions about students.
 
-## 📊 Dataset
+## Dataset
 
-- Source: Kaggle
-- File: StudentsPerformance.csv
+- **File:** `data/StudentsPerformance.csv`
+- **Records:** 1,000
+- **Features:** Gender, race/ethnicity, parental level of education, lunch type, test preparation course, mathematics score, reading score, and writing score.
+- **Target:** Binary performance label derived from mathematics score.
 
-Features include:
+The notebook checks dataset structure, summary statistics, and missing values, and includes exploratory visualizations.
 
+## Machine Learning Workflow
+
+1. Load and inspect the dataset.
+2. Perform exploratory data analysis (EDA).
+3. Create the binary performance target using the mathematics score threshold.
+4. Remove the mathematics score from the predictors.
+5. Encode categorical features using Label Encoding.
+6. Split the data into training and test sets (80/20, `random_state=42`).
+7. Train and evaluate classification models.
+8. Save the Random Forest estimator as `models/model.pkl`.
+9. Run an interactive prediction interface using Streamlit.
+
+## Model Comparison
+
+The notebook reports the following test-set accuracy scores:
+
+| Model | Accuracy |
+|---|---:|
+| Logistic Regression | **91.0%** |
+| Random Forest Classifier | 87.5% |
+| Decision Tree Classifier | 86.0% |
+
+**Notebook result:** Logistic Regression achieved the highest recorded accuracy in this experiment. The notebook also saves a Random Forest model artifact (`models/model.pkl`).
+
+Accuracy is based on the notebook's single 80/20 train-test split. It is not a guarantee of performance on new or unseen student populations.
+
+## Streamlit Application
+
+The app collects:
 - Gender
-- Race/Ethnicity
-- Parental Level of Education
-- Lunch
-- Test Preparation Course
-- Reading Score
-- Writing Score
+- Race/ethnicity group
+- Parental education level
+- Lunch type
+- Test preparation status
+- Reading score
+- Writing score
 
-Target:
+After the user selects **Predict**, the app displays either **High Performance** or **Low Performance**.
 
-- High Performance
-- Low Performance
+**Implementation note:** The current `app.py` trains a Random Forest classifier when the app starts. It does not load the saved `models/model.pkl` file. The notebook's model comparison and the app's current training path are therefore separate implementations.
 
----
+## Technology Stack
 
-## 🛠 Technologies Used
+- **Language:** Python
+- **Data analysis:** Pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn
+- **Machine learning:** Scikit-learn
+- **Web application:** Streamlit
+- **Development:** Jupyter Notebook
 
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Scikit-learn
-- Streamlit
+## Repository Structure
 
----
+```text
+student-performance-prediction-ml/
+├── app.py
+├── data/
+│   └── StudentsPerformance.csv
+├── models/
+│   └── model.pkl
+├── notebook/
+│   └── Student_Performance_Prediction.ipynb
+├── screenshots/
+│   ├── app.png
+│   ├── Screenshot 2026-08-07 173926.png
+│   └── Screenshot 2026-08-07 173948.png
+├── requirements.txt
+├── runtime.txt
+└── README.md
+```
 
-## 🤖 Machine Learning Models
+## Screenshots
 
-- Logistic Regression
-- Decision Tree
-- Random Forest
+### Streamlit Application
+![Student Performance Prediction App](screenshots/app.png)
 
-Random Forest produced the best accuracy and was selected as the final model.
+### Project / Notebook
+![Project Screenshot 1](screenshots/Screenshot%202026-08-07%20173926.png)
 
----
+![Project Screenshot 2](screenshots/Screenshot%202026-08-07%20173948.png)
 
-## 📈 Project Workflow
+## Getting Started
 
-1. Data Collection
-2. Data Cleaning
-3. Exploratory Data Analysis (EDA)
-4. Feature Engineering
-5. Model Training
-6. Model Evaluation
-7. Model Selection
-8. Model Deployment using Streamlit
+### 1. Clone the repository
 
----
+```bash
+git clone https://github.com/Hashir2022/student-performance-prediction-ml.git
+cd student-performance-prediction-ml
+```
 
-## 🚀 How to Run
+### 2. Create and activate a virtual environment
 
-Install dependencies
+**Windows PowerShell**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux**
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application
+### 4. Launch the Streamlit app
 
 ```bash
 streamlit run app.py
 ```
 
----
+The application should open in your browser. Keep `data/StudentsPerformance.csv` in its repository location so the app can load the dataset.
 
-## 📂 Project Structure
+## Future Improvements
 
-```
-student-performance-prediction-ml
-│
-├── app.py
-├── requirements.txt
-├── README.md
-├── train_model.py
-├── data/
-├── models/
-├── notebook/
-└── screenshots/
-```
+- Load the persisted model and preprocessing pipeline instead of retraining on every app launch.
+- Use a consistent preprocessing pipeline (for example, `ColumnTransformer` and `OneHotEncoder`) for training and inference.
+- Add stratified cross-validation and report precision, recall, F1-score, and a confusion matrix.
+- Review feature selection and potential demographic bias before any real-world use.
+- Add clearer prediction explanations and model limitations in the app.
 
----
+## Author
 
-## 📷 Screenshots
+**Hashir Ahmed Buriro**  
+Software Engineer | Machine Learning & Data Analysis
 
-Add screenshots of:
-
-- Notebook
-- Model Accuracy
-- Streamlit App
-- Prediction Result
+- GitHub: [Hashir2022](https://github.com/Hashir2022)
+- LinkedIn: [Engr. Hashir Ahmed Buriro](https://www.linkedin.com/in/engr-hashir-ahmed-buriro/)
 
 ---
 
-## 👨‍💻 Author
-
-**Hashir Ahmed Buriro**
-
-Machine Learning Fundamentals Internship
-
-NeuroFive Solutions
+If you find this project useful, feel free to star the repository or connect with me.
